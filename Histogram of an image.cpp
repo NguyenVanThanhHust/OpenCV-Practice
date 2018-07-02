@@ -1,16 +1,15 @@
-#include "opencv2/objdetect/objdetect.hpp"
-#include "opencv2/highgui/highgui.hpp"
-#include "opencv2/imgproc/imgproc.hpp"
-#include <iostream>
-
-using namespace std;
-using namespace cv;
-
-
-void Histogram_x_direction(Mat &image)
+void Histogram(Mat &image, string histogram_name)
 {
 	Mat gray;
-	cvtColor(image, gray, CV_RGB2GRAY);
+	if (image.channels() == 3)
+	{
+		cvtColor(image, gray, CV_RGB2GRAY);
+	}
+	else
+	{
+		gray = image;
+	}
+
 	// Initialize parameters
 	int histSize = 256;    // bin size
 	float range[] = { 0, 255 };
@@ -20,14 +19,7 @@ void Histogram_x_direction(Mat &image)
 	MatND hist;
 	calcHist(&gray, 1, 0, Mat(), hist, 1, &histSize, ranges, true, false);
 
-	// Show the calculated histogram in command window
-	double total;
-	total = gray.rows * gray.cols;
-	for (int h = 0; h < histSize; h++)
-	{
-		float binVal = hist.at<float>(h);
-		cout << " " << binVal;
-	}
+
 
 	// Plot the histogram
 	int hist_w = 512; int hist_h = 400;
@@ -43,13 +35,7 @@ void Histogram_x_direction(Mat &image)
 			Scalar(255, 0, 0), 2, 8, 0);
 	}
 
-	namedWindow("Result", 1);    imshow("Result", histImage);
+	imshow(histogram_name, histImage);
 }
-int main()
-{
-	Mat gray = imread("index.jpg", 1);
-	Histogram_x_direction(gray);
 
-	waitKey(0);
-	return 0;
-}
+

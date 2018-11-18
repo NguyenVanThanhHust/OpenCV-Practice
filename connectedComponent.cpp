@@ -34,9 +34,9 @@ static void on_trackbar(int, void*)
 	imshow("Connected Components", dst);
 }
 
-Mat connectedMat(Mat &img)
+Mat connectedMat(Mat img, int threshold)
 {
-	Mat bw = threshval < 128 ? (img < threshval) : (img > threshval);
+	Mat bw = threshold < 128 ? (img < threshold) : (img > threshold);
 	Mat labelImage(img.size(), CV_32S);
 	int nLabels = connectedComponents(bw, labelImage, 8);
 	std::vector<Vec3b> colors(nLabels);
